@@ -1,0 +1,627 @@
+<project>
+  <packages>
+    <javaPackage name="com.sinergia.springbatch.test.domain.util">
+      <projectName>sinergia-springbatch-test-design</projectName>
+      <path>src/main/java/com/sinergia/springbatch/test/domain/util</path>
+      <classes>
+        <classifier name="HibernateHelper">
+          <stereotype>Persistence Helper</stereotype>
+          <variables>
+            <variable name="singleton">
+              <type class="com.sinergia.springbatch.test.domain.util.HibernateHelper"/>
+              <multiplicity>0..1</multiplicity>
+              <modifiers>8</modifiers>
+              <access>2</access>
+              <value>new HibernateHelper()</value>
+            </variable>
+            <variable name="factory">
+              <type>javax.persistence.EntityManagerFactory</type>
+              <multiplicity>0..1</multiplicity>
+              <access>2</access>
+            </variable>
+            <variable name="currentEntityManager">
+              <type>ThreadLocal</type>
+              <multiplicity>0..1</multiplicity>
+              <access>2</access>
+              <value>new ThreadLocal();</value>
+            </variable>
+          </variables>
+          <operations>
+            <operation name="constructor">
+              <multiplicity>1</multiplicity>
+              <access>2</access>
+              <generatedName>HibernateHelper</generatedName>
+              <method>
+                <statements>
+                  <javaCode></javaCode>
+                </statements>
+              </method>
+            </operation>
+            <operation name="main">
+              <type basicType="void"/>
+              <multiplicity>0</multiplicity>
+              <modifiers>8</modifiers>
+              <access>1</access>
+              <generatedName>main</generatedName>
+              <parameters>
+                <variable name="args">
+                  <type>String</type>
+                  <multiplicity>*</multiplicity>
+                  <access>1</access>
+                  <arrayCount>1</arrayCount>
+                </variable>
+              </parameters>
+              <exceptions>
+                <exception>Exception</exception>
+              </exceptions>
+              <method>
+                <statements>
+                  <javaCode>String sqlFile = null;</javaCode>
+                  <javaCode>if(args.length &gt; 0) { sqlFile = args[0]; }</javaCode>
+                  <javaCode>boolean print = (sqlFile == null);</javaCode>
+                  <javaCode>boolean export = (sqlFile == null);</javaCode>
+                  <javaCode></javaCode>
+                  <javaCode>org.hibernate.cfg.Configuration config = getInstance().getConfiguration();</javaCode>
+                  <javaCode>org.hibernate.tool.hbm2ddl.SchemaExport exporter = new org.hibernate.tool.hbm2ddl.SchemaExport(config);</javaCode>
+                  <javaCode>if(sqlFile != null) { exporter.setOutputFile(sqlFile); }</javaCode>
+                  <javaCode>exporter.create(print, export);</javaCode>
+                </statements>
+              </method>
+            </operation>
+            <operation name="getInstance">
+              <type class="com.sinergia.springbatch.test.domain.util.HibernateHelper"/>
+              <multiplicity>0..1</multiplicity>
+              <modifiers>8</modifiers>
+              <access>1</access>
+              <generatedName>getInstance</generatedName>
+              <method>
+                <statements>
+                  <javaCode>return singleton;</javaCode>
+                </statements>
+              </method>
+            </operation>
+            <operation name="getFactory">
+              <type>javax.persistence.EntityManagerFactory</type>
+              <multiplicity>0..1</multiplicity>
+              <modifiers>32</modifiers>
+              <access>1</access>
+              <generatedName>getFactory</generatedName>
+              <method>
+                <statements>
+                  <javaCode>if(factory == null) { factory=javax.persistence.Persistence.createEntityManagerFactory(&quot;sinergia-springbatch-test-design&quot;); }</javaCode>
+                  <javaCode>return factory;</javaCode>
+                </statements>
+              </method>
+            </operation>
+            <operation name="close">
+              <type basicType="void"/>
+              <multiplicity>0</multiplicity>
+              <modifiers>32</modifiers>
+              <access>1</access>
+              <generatedName>close</generatedName>
+              <method>
+                <statements>
+                  <javaCode>closeEntityManager();</javaCode>
+                  <javaCode>if (factory != null) { factory.close(); factory = null; }</javaCode>
+                </statements>
+              </method>
+            </operation>
+            <operation name="getConfiguration">
+              <type>org.hibernate.cfg.Configuration</type>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+              <generatedName>getConfiguration</generatedName>
+              <exceptions>
+                <exception>org.hibernate.MappingException</exception>
+              </exceptions>
+              <method>
+                <statements>
+                  <javaCode>org.hibernate.cfg.AnnotationConfiguration config = new org.hibernate.cfg.AnnotationConfiguration();</javaCode>
+                  <javaCode>config.addAnnotatedClass(com.sinergia.springbatch.test.domain.Person.class);</javaCode>
+                  <javaCode>config.addAnnotatedClass(com.sinergia.springbatch.test.domain.MedicalHistory.class);</javaCode>
+                  <javaCode>return config;</javaCode>
+                </statements>
+              </method>
+            </operation>
+            <operation name="getEntityManager">
+              <type>javax.persistence.EntityManager</type>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+              <generatedName>getEntityManager</generatedName>
+              <method>
+                <statements>
+                  <javaCode>javax.persistence.EntityManager entityManager=(javax.persistence.EntityManager)currentEntityManager.get();</javaCode>
+                  <javaCode>if(entityManager == null || !entityManager.isOpen()) { entityManager=getFactory().createEntityManager(); currentEntityManager.set(entityManager); }</javaCode>
+                  <javaCode>return entityManager;</javaCode>
+                </statements>
+              </method>
+            </operation>
+            <operation name="closeEntityManager">
+              <type>void</type>
+              <multiplicity>0</multiplicity>
+              <access>1</access>
+              <generatedName>closeEntityManager</generatedName>
+              <method>
+                <statements>
+                  <javaCode>javax.persistence.EntityManager entityManager = (javax.persistence.EntityManager)currentEntityManager.get();</javaCode>
+                  <javaCode>if (entityManager != null &amp;&amp; entityManager.isOpen()) { entityManager.close(); }</javaCode>
+                  <javaCode>currentEntityManager.set(null);</javaCode>
+                </statements>
+              </method>
+            </operation>
+          </operations>
+          <generatedFiles>
+            <name>HibernateHelper.java</name>
+            <compilationUnitId>=sinergia-springbatch-test-design/src\/main\/java&lt;com.sinergia.springbatch.test.domain.util{HibernateHelper.java</compilationUnitId>
+          </generatedFiles>
+        </classifier>
+      </classes>
+      <rootName>src/main/java</rootName>
+      <generateHibernateHelper>true</generateHibernateHelper>
+    </javaPackage>
+    <javaPackage name="com.sinergia.springbatch.test.domain">
+      <projectName>sinergia-springbatch-test-design</projectName>
+      <path>src/main/java/com/sinergia/springbatch/test/domain</path>
+      <classes>
+        <classifier name="Person">
+          <stereotype>Persistent</stereotype>
+          <interfaces>
+            <type>java.io.Serializable</type>
+          </interfaces>
+          <variables>
+            <variable name="serialVersionUID">
+              <type>long</type>
+              <multiplicity>1</multiplicity>
+              <modifiers>24</modifiers>
+              <access>2</access>
+              <value>1510120619</value>
+            </variable>
+            <variable name="id">
+              <type>Long</type>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+              <stereotype>id</stereotype>
+              <tags>
+                <tag name="@Id"/>
+                <tag name="@GeneratedValue"/>
+              </tags>
+            </variable>
+            <variable name="names">
+              <type class="java.lang.String"/>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+            </variable>
+            <variable name="surnames">
+              <type class="java.lang.String"/>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+            </variable>
+            <variable name="medicalHistory">
+              <type class="com.sinergia.springbatch.test.domain.MedicalHistory"/>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+              <inverse class="com.sinergia.springbatch.test.domain.MedicalHistory" name="persons"/>
+            </variable>
+          </variables>
+          <operations>
+            <operation name="constructor">
+              <multiplicity>1</multiplicity>
+              <access>1</access>
+              <generatedName>Person</generatedName>
+              <method>
+                <statements>
+                  <javaCode></javaCode>
+                </statements>
+              </method>
+            </operation>
+          </operations>
+          <generatedFiles>
+            <name>Person.java</name>
+            <compilationUnitId>=sinergia-springbatch-test-design/src\/main\/java&lt;com.sinergia.springbatch.test.domain{Person.java</compilationUnitId>
+          </generatedFiles>
+        </classifier>
+        <classifier name="MedicalHistory">
+          <stereotype>Persistent</stereotype>
+          <interfaces>
+            <type>java.io.Serializable</type>
+          </interfaces>
+          <variables>
+            <variable name="serialVersionUID">
+              <type>long</type>
+              <multiplicity>1</multiplicity>
+              <modifiers>24</modifiers>
+              <access>2</access>
+              <value>-2052466663</value>
+            </variable>
+            <variable name="id">
+              <type>Long</type>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+              <stereotype>id</stereotype>
+              <tags>
+                <tag name="@Id"/>
+                <tag name="@GeneratedValue"/>
+              </tags>
+            </variable>
+            <variable name="data">
+              <type class="java.lang.String"/>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+              <tags>
+                <tag name="@Column">
+                  <parameters>
+                    <length>10485760</length>
+                  </parameters>
+                </tag>
+              </tags>
+            </variable>
+            <variable name="persons">
+              <type class="com.sinergia.springbatch.test.domain.Person"/>
+              <multiplicity>*</multiplicity>
+              <access>1</access>
+              <value>new com.sinergia.springbatch.test.domain.Person()</value>
+              <inverse class="com.sinergia.springbatch.test.domain.Person" name="medicalHistory"/>
+            </variable>
+            <variable name="initDate">
+              <type class="java.util.Date"/>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+            </variable>
+            <variable name="history">
+              <type class="com.sinergia.springbatch.test.domain.History"/>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+              <inverse class="com.sinergia.springbatch.test.domain.History" name="medicalHistory"/>
+            </variable>
+          </variables>
+          <operations>
+            <operation name="constructor">
+              <multiplicity>1</multiplicity>
+              <access>1</access>
+              <generatedName>MedicalHistory</generatedName>
+              <method>
+                <statements>
+                  <javaCode></javaCode>
+                </statements>
+              </method>
+            </operation>
+          </operations>
+          <generatedFiles>
+            <name>MedicalHistory.java</name>
+            <compilationUnitId>=sinergia-springbatch-test-design/src\/main\/java&lt;com.sinergia.springbatch.test.domain{MedicalHistory.java</compilationUnitId>
+          </generatedFiles>
+        </classifier>
+        <classifier name="History">
+          <stereotype>Java Bean</stereotype>
+          <interfaces>
+            <type>java.io.Serializable</type>
+          </interfaces>
+          <variables>
+            <variable name="code">
+              <type class="java.lang.String"/>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+            </variable>
+            <variable name="photo">
+              <type class="java.lang.String"/>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+            </variable>
+            <variable name="serialVersionUID">
+              <type>long</type>
+              <multiplicity>1</multiplicity>
+              <modifiers>24</modifiers>
+              <access>2</access>
+              <value>1174474238</value>
+            </variable>
+            <variable name="medicines">
+              <type class="com.sinergia.springbatch.test.domain.Medicine"/>
+              <multiplicity>*</multiplicity>
+              <access>1</access>
+              <value>new com.sinergia.springbatch.test.domain.Medicine()</value>
+              <inverse class="com.sinergia.springbatch.test.domain.Medicine" name="history"/>
+            </variable>
+            <variable name="medicalHistory">
+              <type class="com.sinergia.springbatch.test.domain.MedicalHistory"/>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+              <inverse class="com.sinergia.springbatch.test.domain.MedicalHistory" name="history"/>
+            </variable>
+          </variables>
+          <operations>
+            <operation name="constructor">
+              <multiplicity>1</multiplicity>
+              <access>1</access>
+              <generatedName>History</generatedName>
+              <method>
+                <statements>
+                  <javaCode></javaCode>
+                </statements>
+              </method>
+            </operation>
+          </operations>
+          <generatedFiles>
+            <name>History.java</name>
+            <compilationUnitId>=sinergia-springbatch-test-design/src\/main\/java&lt;com.sinergia.springbatch.test.domain{History.java</compilationUnitId>
+          </generatedFiles>
+        </classifier>
+        <classifier name="Medicine">
+          <stereotype>Java Bean</stereotype>
+          <interfaces>
+            <type>java.io.Serializable</type>
+          </interfaces>
+          <variables>
+            <variable name="name">
+              <type class="java.lang.String"/>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+            </variable>
+            <variable name="serialVersionUID">
+              <type>long</type>
+              <multiplicity>1</multiplicity>
+              <modifiers>24</modifiers>
+              <access>2</access>
+              <value>-1816897008</value>
+            </variable>
+            <variable name="history">
+              <type class="com.sinergia.springbatch.test.domain.History"/>
+              <multiplicity>0..1</multiplicity>
+              <access>1</access>
+              <inverse class="com.sinergia.springbatch.test.domain.History" name="medicines"/>
+            </variable>
+          </variables>
+          <operations>
+            <operation name="constructor">
+              <multiplicity>1</multiplicity>
+              <access>1</access>
+              <generatedName>Medicine</generatedName>
+              <method>
+                <statements>
+                  <javaCode></javaCode>
+                </statements>
+              </method>
+            </operation>
+          </operations>
+          <generatedFiles>
+            <name>Medicine.java</name>
+            <compilationUnitId>=sinergia-springbatch-test-design/src\/main\/java&lt;com.sinergia.springbatch.test.domain{Medicine.java</compilationUnitId>
+          </generatedFiles>
+        </classifier>
+      </classes>
+      <diagrams>
+        <classDiagram name="domain">
+          <showAttributes>true</showAttributes>
+          <showOperations>true</showOperations>
+          <tagSymbol id="1">
+            <x>658</x>
+            <y>46</y>
+            <connectedTo symbol="4"/>
+            <tag class="com.sinergia.springbatch.test.domain.MedicalHistory" variable="data" id="@Column"/>
+            <showNotSet>true</showNotSet>
+          </tagSymbol>
+          <classSymbol id="2">
+            <x>151</x>
+            <y>310</y>
+            <class class="com.sinergia.springbatch.test.domain.Medicine"/>
+            <attributes autoDisplay="289" accessVisible="true">
+              <attribute>name</attribute>
+            </attributes>
+            <operations autoDisplay="37" accessVisible="true" parametersVisible="true"/>
+          </classSymbol>
+          <classSymbol id="3">
+            <x>452</x>
+            <y>294</y>
+            <class class="com.sinergia.springbatch.test.domain.History"/>
+            <attributes autoDisplay="289" accessVisible="true">
+              <attribute>code</attribute>
+              <attribute>photo</attribute>
+            </attributes>
+            <operations autoDisplay="37" accessVisible="true" parametersVisible="true"/>
+          </classSymbol>
+          <classSymbol id="4">
+            <x>453</x>
+            <y>66</y>
+            <class class="com.sinergia.springbatch.test.domain.MedicalHistory"/>
+            <attributes autoDisplay="353" accessVisible="true">
+              <attribute>id</attribute>
+              <attribute>data</attribute>
+              <attribute>initDate</attribute>
+            </attributes>
+            <operations autoDisplay="37" accessVisible="true" parametersVisible="true"/>
+          </classSymbol>
+          <classSymbol id="5">
+            <x>94</x>
+            <y>84</y>
+            <class class="com.sinergia.springbatch.test.domain.Person"/>
+            <attributes autoDisplay="353" accessVisible="true">
+              <attribute>id</attribute>
+              <attribute>names</attribute>
+              <attribute>surnames</attribute>
+            </attributes>
+            <operations autoDisplay="37" accessVisible="true" parametersVisible="true"/>
+          </classSymbol>
+          <association id="6">
+            <x>180</x>
+            <y>119</y>
+            <assocEnd-0 class="com.sinergia.springbatch.test.domain.MedicalHistory" name="persons"/>
+            <assocEnd-1 class="com.sinergia.springbatch.test.domain.Person" name="medicalHistory"/>
+            <showMultiplicity>true</showMultiplicity>
+            <point>
+              <connectX symbol="5"/>
+              <connectY symbol="5"/>
+              <x>0</x>
+              <y>0</y>
+              <atX>0.81904763</atX>
+              <atY>0.36842105</atY>
+            </point>
+            <point>
+              <connectX symbol="4"/>
+              <connectY symbol="4"/>
+              <x>0</x>
+              <y>0</y>
+              <atX>0.2761905</atX>
+              <atY>0.78205127</atY>
+            </point>
+            <end-1>
+              <x>199</x>
+              <y>140</y>
+              <w>49</w>
+              <h>34</h>
+              <connectedSymbol symbol="5"/>
+              <text>+persons</text>
+              <text>*</text>
+            </end-1>
+            <end-2>
+              <x>453</x>
+              <y>140</y>
+              <w>88</w>
+              <h>34</h>
+              <connectedSymbol symbol="4"/>
+              <text>+medicalHistory</text>
+              <text>0..1</text>
+            </end-2>
+            <style>RECTANGULAR</style>
+          </association>
+          <association id="7">
+            <x>469</x>
+            <y>338</y>
+            <assocEnd-0 class="com.sinergia.springbatch.test.domain.Medicine" name="history"/>
+            <assocEnd-1 class="com.sinergia.springbatch.test.domain.History" name="medicines"/>
+            <showMultiplicity>true</showMultiplicity>
+            <point>
+              <connectX symbol="3"/>
+              <connectY symbol="3"/>
+              <x>0</x>
+              <y>0</y>
+              <atX>0.17894737</atX>
+              <atY>0.5641026</atY>
+            </point>
+            <point>
+              <connectX symbol="2"/>
+              <connectY symbol="2"/>
+              <x>0</x>
+              <y>0</y>
+              <atX>0.9368421</atX>
+              <atY>0.44262296</atY>
+            </point>
+            <end-1>
+              <x>452</x>
+              <y>337</y>
+              <w>44</w>
+              <h>34</h>
+              <connectedSymbol symbol="3"/>
+              <text>+history</text>
+              <text>0..1</text>
+            </end-1>
+            <end-2>
+              <x>246</x>
+              <y>337</y>
+              <w>62</w>
+              <h>34</h>
+              <connectedSymbol symbol="2"/>
+              <text>+medicines</text>
+              <text>*</text>
+            </end-2>
+            <style>RECTANGULAR</style>
+          </association>
+          <association id="8">
+            <x>513</x>
+            <y>129</y>
+            <assocEnd-0 class="com.sinergia.springbatch.test.domain.History" name="medicalHistory"/>
+            <assocEnd-1 class="com.sinergia.springbatch.test.domain.MedicalHistory" name="history"/>
+            <showMultiplicity>true</showMultiplicity>
+            <point>
+              <connectX symbol="4"/>
+              <connectY symbol="4"/>
+              <x>0</x>
+              <y>0</y>
+              <atX>0.5714286</atX>
+              <atY>0.6631579</atY>
+            </point>
+            <point>
+              <connectX symbol="3"/>
+              <connectY symbol="3"/>
+              <x>0</x>
+              <y>0</y>
+              <atX>0.6</atX>
+              <atY>0.115384616</atY>
+            </point>
+            <end-1>
+              <x>509</x>
+              <y>161</y>
+              <w>88</w>
+              <h>34</h>
+              <connectedSymbol symbol="4"/>
+              <text>+medicalHistory</text>
+              <text>0..1</text>
+            </end-1>
+            <end-2>
+              <x>509</x>
+              <y>294</y>
+              <w>44</w>
+              <h>34</h>
+              <connectedSymbol symbol="3"/>
+              <text>+history</text>
+              <text>0..1</text>
+            </end-2>
+            <style>RECTANGULAR</style>
+          </association>
+          <width>1400</width>
+          <height>1000</height>
+          <lineStyle>RECTANGULAR</lineStyle>
+        </classDiagram>
+      </diagrams>
+      <rootName>src/main/java</rootName>
+    </javaPackage>
+  </packages>
+  <basicTypes>
+    <basicType>void</basicType>
+    <basicType>int</basicType>
+  </basicTypes>
+  <codeGenerators>
+    <Java-Bean>
+      <generate-property-support>false</generate-property-support>
+    </Java-Bean>
+    <Unit-Test>
+      <src-dir>(default)</src-dir>
+      <add-junit3-libraries>false</add-junit3-libraries>
+    </Unit-Test>
+    <Persistent>
+      <create-hibernate-cfg-xml>false</create-hibernate-cfg-xml>
+      <add-hsqldb-libraries>false</add-hsqldb-libraries>
+      <platform>Java Persistence API</platform>
+      <create-persistence-xml>true</create-persistence-xml>
+      <src-dir>(default)</src-dir>
+      <create-helper-main>true</create-helper-main>
+      <annotate-getters>false</annotate-getters>
+      <generate-dto-associations-many>false</generate-dto-associations-many>
+      <generate-collections-as-set>true</generate-collections-as-set>
+      <generate-full-classnames>true</generate-full-classnames>
+      <add-hibernate3-libraries>false</add-hibernate3-libraries>
+      <generate-dto>false</generate-dto>
+      <generate-interfaces>false</generate-interfaces>
+    </Persistent>
+    <DAO>
+      <src-dir>(default)</src-dir>
+      <generate-interfaces>false</generate-interfaces>
+      <use-spring-templates>false</use-spring-templates>
+    </DAO>
+    <GWT-Service>
+      <version>1.5</version>
+    </GWT-Service>
+  </codeGenerators>
+  <properties>
+    <conf-dir>(default)</conf-dir>
+    <root-package>com.sinergia.springbatch.test.domain</root-package>
+    <create-hibernate-properties>true</create-hibernate-properties>
+    <create-log4j-properties>true</create-log4j-properties>
+  </properties>
+  <codeGeneration>
+    <generate-equals-and-hashcode>true</generate-equals-and-hashcode>
+    <source-compatibility>5.0</source-compatibility>
+    <grammar>None</grammar>
+  </codeGeneration>
+  <diagramProperties>
+    <link-with-java-editor>false</link-with-java-editor>
+  </diagramProperties>
+</project>
